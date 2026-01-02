@@ -1,0 +1,48 @@
+version: '3.9'
+
+services:
+  frontend:
+    build: ./frontend
+    container_name: whiteboard-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_URL=/api
+      - VITE_WS_URL=ws://localhost:3000/ws
+
+  backend:
+    build: ./backend
+    container_name: whiteboard-backend
+    command: uvicorn backend.main:app --host 0.0.0.0 --port 8000
+    volumes:
+      - ./:/app
+    working_dir: /app
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=whiteboard
+      - POSTGRES_USER=whiteboard
+      - POSTGRES_PASSWORD=whiteboard
+      - SECRET_KEY=docker-secret-key-change-in-production
+      - BACKEND_CORS_ORIGINS=http://localhost:3000,http://localhost:5173
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16-alpine
+    container_name: whiteboard-db
+    environment:
+      POSTGRES_DB: whiteboard
+      POSTGRES_USER: whiteboard
+      POSTGRES_PASSWORD: whiteboard
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
