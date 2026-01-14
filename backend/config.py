@@ -1,3 +1,4 @@
+import os
 from functools import lru_cache
 from pydantic_settings import BaseSettings
 
@@ -13,7 +14,10 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     jwt_access_token_expires_minutes: int = 60 * 24 * 7  # 7 days
 
-    # Database
+    # Database - Production uses DATABASE_URL from Neon
+    database_url: str | None = None
+    
+    # Legacy PostgreSQL settings (for Docker)
     postgres_host: str = "db"
     postgres_port: int = 5432
     postgres_db: str = "whiteboard"
@@ -22,14 +26,18 @@ class Settings(BaseSettings):
 
     @property
     def sqlalchemy_database_uri(self) -> str:
-        # Use SQLite for local development
+        # Priority 1: DATABASE_URL environment variable (for Render + Neon)
+        if self.database_url:
+            # Neon uses postgresql:// but SQLAlchemy needs postgresql+psycopg2://
+            db_url = self.database_url
+            if db_url.startswith("postgres://"):
+                db_url = db_url.replace("postgres://", "postgresql+psycopg2://", 1)
+            elif db_url.startswith("postgresql://"):
+                db_url = db_url.replace("postgresql://", "postgresql+psycopg2://", 1)
+            return db_url
+        
+        # Priority 2: Use SQLite for local development
         return "sqlite:///./whiteboard.db"
-        # PostgreSQL for Docker:
-        # return (
-        #     f"postgresql+psycopg2://{self.postgres_user}:"
-        #     f"{self.postgres_password}@{self.postgres_host}:"
-        #     f"{self.postgres_port}/{self.postgres_db}"
-        # )
 
 
     class Config:
