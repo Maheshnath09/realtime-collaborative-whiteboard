@@ -4,7 +4,7 @@ from uuid import uuid4
 from sqlalchemy import Boolean, Column, DateTime, ForeignKey, String, Text
 from sqlalchemy.orm import relationship
 
-from ..database import Base
+from database import Base
 
 
 class Board(Base):

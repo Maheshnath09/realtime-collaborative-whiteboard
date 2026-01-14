@@ -4,7 +4,7 @@ from uuid import uuid4
 from sqlalchemy import Boolean, Column, DateTime, Float, ForeignKey, Integer, String, Text, JSON
 
 
-from ..database import Base
+from database import Base
 
 
 class Element(Base):
