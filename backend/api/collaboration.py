@@ -3,10 +3,10 @@ from sqlalchemy.orm import Session
 from typing import List
 from datetime import datetime
 
-from ..database import get_db
-from ..models import Invitation, BoardMember, Board, User
-from ..services.auth_service import get_current_user
-from ..schemas.collaboration import (
+from database import get_db
+from models import Invitation, BoardMember, Board, User
+from services.auth_service import get_current_user
+from schemas.collaboration import (
     InvitationCreate,
     InvitationResponse,
     CollaboratorResponse,

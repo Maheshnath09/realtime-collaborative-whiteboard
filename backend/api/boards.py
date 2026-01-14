@@ -3,11 +3,11 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
-from ..database import get_db
-from ..models import Board, BoardMember
-from ..schemas.board import BoardCreate, BoardResponse, BoardUpdate
-from ..services.auth_service import get_current_user
-from ..utils.security import get_password_hash, verify_password
+from database import get_db
+from models import Board, BoardMember
+from schemas.board import BoardCreate, BoardResponse, BoardUpdate
+from services.auth_service import get_current_user
+from utils.security import get_password_hash, verify_password
 
 
 router = APIRouter(prefix="/api/boards", tags=["boards"])

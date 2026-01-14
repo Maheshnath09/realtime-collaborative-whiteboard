@@ -1,12 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from .api import auth as auth_routes
-from .api import boards as board_routes
-from .api import websocket as ws_routes
-from .api import collaboration as collab_routes
-from .config import get_settings
-from .database import Base, engine
+from api import auth as auth_routes
+from api import boards as board_routes
+from api import websocket as ws_routes
+from api import collaboration as collab_routes
+from config import get_settings
+from database import Base, engine
 
 
 settings = get_settings()

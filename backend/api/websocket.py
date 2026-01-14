@@ -1,7 +1,7 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends, Query
 
-from ..services.auth_service import get_current_user_ws
-from ..websocket_manager import manager
+from services.auth_service import get_current_user_ws
+from websocket_manager import manager
 
 
 router = APIRouter()
@@ -15,7 +15,7 @@ async def websocket_endpoint(
 ):
     # Verify user from JWT token
     from sqlalchemy.orm import Session  # local import to avoid circular
-    from ..database import get_db
+    from database import get_db
 
     db_gen = get_db()
     db: Session = next(db_gen)
